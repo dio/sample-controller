@@ -67,14 +67,14 @@ func newFixture(t *testing.T) *fixture {
 	return f
 }
 
-func newFoo(name string, replicas *int32) *samplecontroller.Foo {
+func newFoo(name string, replicas int32) *samplecontroller.Foo {
 	return &samplecontroller.Foo{
 		TypeMeta: metav1.TypeMeta{APIVersion: samplecontroller.SchemeGroupVersion.String()},
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      name,
 			Namespace: metav1.NamespaceDefault,
 		},
-		Spec: samplecontroller.FooSpec{
+		Spec: &samplecontroller.FooSpec{
 			DeploymentName: fmt.Sprintf("%s-deployment", name),
 			Replicas:       replicas,
 		},
@@ -251,7 +251,7 @@ func getKey(foo *samplecontroller.Foo, t *testing.T) string {
 
 func TestCreatesDeployment(t *testing.T) {
 	f := newFixture(t)
-	foo := newFoo("test", int32Ptr(1))
+	foo := newFoo("test", 1)
 
 	f.fooLister = append(f.fooLister, foo)
 	f.objects = append(f.objects, foo)
@@ -265,7 +265,7 @@ func TestCreatesDeployment(t *testing.T) {
 
 func TestDoNothing(t *testing.T) {
 	f := newFixture(t)
-	foo := newFoo("test", int32Ptr(1))
+	foo := newFoo("test", 1)
 	d := newDeployment(foo)
 
 	f.fooLister = append(f.fooLister, foo)
@@ -279,11 +279,11 @@ func TestDoNothing(t *testing.T) {
 
 func TestUpdateDeployment(t *testing.T) {
 	f := newFixture(t)
-	foo := newFoo("test", int32Ptr(1))
+	foo := newFoo("test", 1)
 	d := newDeployment(foo)
 
 	// Update replicas
-	foo.Spec.Replicas = int32Ptr(2)
+	foo.Spec.Replicas = 2
 	expDeployment := newDeployment(foo)
 
 	f.fooLister = append(f.fooLister, foo)
@@ -298,7 +298,7 @@ func TestUpdateDeployment(t *testing.T) {
 
 func TestNotControlledByUs(t *testing.T) {
 	f := newFixture(t)
-	foo := newFoo("test", int32Ptr(1))
+	foo := newFoo("test", 1)
 	d := newDeployment(foo)
 
 	d.ObjectMeta.OwnerReferences = []metav1.OwnerReference{}
@@ -310,5 +310,3 @@ func TestNotControlledByUs(t *testing.T) {
 
 	f.runExpectError(getKey(foo, t))
 }
-
-func int32Ptr(i int32) *int32 { return &i }

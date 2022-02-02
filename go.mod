@@ -5,6 +5,8 @@ module k8s.io/sample-controller
 go 1.16
 
 require (
+	github.com/golang/protobuf v1.5.2
+	google.golang.org/protobuf v1.27.1
 	k8s.io/api v0.0.0-20220122011914-e6d62ddcb184
 	k8s.io/apimachinery v0.0.0-20220122011717-3d7c63b4de4f
 	k8s.io/client-go v0.0.0-20220122012155-3255cdcd9cf0

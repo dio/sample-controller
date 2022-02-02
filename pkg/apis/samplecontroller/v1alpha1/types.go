@@ -28,14 +28,8 @@ type Foo struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	Spec   FooSpec   `json:"spec"`
+	Spec   *FooSpec  `json:"spec"`
 	Status FooStatus `json:"status"`
-}
-
-// FooSpec is the spec for a Foo resource
-type FooSpec struct {
-	DeploymentName string `json:"deploymentName"`
-	Replicas       *int32 `json:"replicas"`
 }
 
 // FooStatus is the status for a Foo resource

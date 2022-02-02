@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package apis.samplecontroller.v1alpha1;
+
+option go_package = "k8s.io/samplecontroller/apis/samplecontroller/v1alpha1";
+
+message FooSpec {
+  string deployment_name = 1;
+  int32 replicas = 2;
+}
